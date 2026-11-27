@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ationo Workspace</title>
-<link rel="icon" type="image/jpeg" href="/logo.jpg">
+<link rel="icon" type="image/jpeg" href="https://lh3.googleusercontent.com/aida-public/AB6AXuAG1tsaJZ-HLw-nd0bwxIt54bFL-YmBpgohkVElYNLFVF6wgCAjqQN1u1eY43eiCvss3Y690WwCdoRBmXmyPs5GonSjYoVCkQXuPYxn47RCrDrNFt1mrTsst5JfzShyBctKeD00cnYL2ywECrkMut0p99GY9VMn6C8_KsHyuEmzjWEBvU4EnsvmKr_5uN7tbP91NfRT6574GGlQeJVeLOJIxxjNgkJRHNoCA5gOqKUDd62BvLtwfokj">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
@@ -10,7 +10,7 @@
 h1,h2,h3,.logo{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.02em;margin:0}h1{font-size:30px}h3{font-size:17px;margin-bottom:12px}
 .mut{color:var(--mut)}small{color:var(--mut)}
 .shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
-aside{background:#fff;border-right:1px solid var(--bd);padding:20px 12px}.logo{font-size:18px;font-weight:700;padding:4px 12px 20px}.logo img{display:block;width:100%;height:auto;object-fit:contain}
+aside{background:#fff;border-right:1px solid var(--bd);padding:20px 12px}.logo{font-size:18px;font-weight:700;padding:4px 12px 20px}.logo img{display:block;width:160px;height:88px;object-fit:contain}
 nav a{display:block;padding:10px 12px;border-radius:8px;color:#334155;text-decoration:none;font-weight:600;margin-bottom:2px}nav a.on{background:#dbeafe;color:var(--p)}nav a:hover{background:#f1f5f9}
 header{display:flex;justify-content:space-between;align-items:center;padding:12px 40px;background:#fff;border-bottom:1px solid var(--bd)}
 main{padding:28px 40px;max-width:1280px}.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:20px;flex-wrap:wrap}
@@ -32,7 +32,7 @@ table{width:100%;border-collapse:collapse}th{text-align:left;font-size:11px;text
 .row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f1f5f9}
 .task{border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:12px;background:#fff}.task.c{background:#eff4ff}
 dialog{border:0;border-radius:16px;padding:24px;width:min(460px,92vw);box-shadow:0 20px 25px -5px rgba(15,23,42,.2)}dialog::backdrop{background:rgba(15,23,42,.4);backdrop-filter:blur(4px)}
-.lg{min-height:100vh;display:grid;place-items:center;padding:16px}.lg .card{width:min(420px,100%);padding:32px}.lg h2{font-size:22px;text-align:center}.lg .brand-mark{display:block;width:112px;height:auto;object-fit:contain;margin:0 auto 12px}.err{color:var(--bad);font-weight:600;margin-top:10px;min-height:18px}
+.lg{min-height:100vh;display:grid;place-items:center;padding:16px}.lg .card{width:min(420px,100%);padding:32px}.lg h2{font-size:22px;text-align:center}.lg .brand-mark{display:block;width:112px;height:61px;object-fit:contain;margin:0 auto 12px}.err{color:var(--bad);font-weight:600;margin-top:10px;min-height:18px}
 @media(max-width:900px){.shell{grid-template-columns:1fr}aside{display:flex;overflow-x:auto;padding:8px}.logo{display:none}nav{display:flex;gap:4px}nav a{white-space:nowrap}main,header{padding:16px}.g4,.g2,.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
 </style></head><body><div id="app"></div>
 <script>
@@ -54,7 +54,7 @@ const who=n=>`<span class="av">${esc(ini(n))}</span>${esc(n)}`;
 const NAV={founder:[['dashboard','Dashboard'],['employees','Employee Directory'],['tasks','Tasks & Projects'],['attendance','Attendance Reports']],employee:[['portal','Employee Portal'],['tasks','My Tasks'],['attendance','My Attendance']]};
 
 function loginView(msg=''){
-  app.innerHTML=`<div class="lg"><form class="card" id="lf"><img class="brand-mark" src="/logo.jpg" alt="ATIONO WORKSPACE"><h2>ATIONO WORKSPACE</h2><p class="mut" style="text-align:center;margin:4px 0 20px">Enterprise Unified Infrastructure Control</p>
+  app.innerHTML=`<div class="lg"><form class="card" id="lf"><img class="brand-mark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG1tsaJZ-HLw-nd0bwxIt54bFL-YmBpgohkVElYNLFVF6wgCAjqQN1u1eY43eiCvss3Y690WwCdoRBmXmyPs5GonSjYoVCkQXuPYxn47RCrDrNFt1mrTsst5JfzShyBctKeD00cnYL2ywECrkMut0p99GY9VMn6C8_KsHyuEmzjWEBvU4EnsvmKr_5uN7tbP91NfRT6574GGlQeJVeLOJIxxjNgkJRHNoCA5gOqKUDd62BvLtwfokj" alt="ATIONO WORKSPACE"><h2>ATIONO WORKSPACE</h2><p class="mut" style="text-align:center;margin:4px 0 20px">Enterprise Unified Infrastructure Control</p>
   <label>Work Email or Employee ID</label><input name="u" placeholder="e.g. EMP-103 or user@ationo.work" required autocomplete="username">
   <label>Password</label><input name="pw" type="password" required autocomplete="current-password">
   <button class="btn pri" style="width:100%;margin-top:18px;height:42px">Sign In to Workspace →</button><div class="err" id="er">${esc(msg)}</div></form></div>`;
