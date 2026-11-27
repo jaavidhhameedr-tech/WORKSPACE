@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ationo Workspace</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style>
+:root{--p:#1d4ed8;--ink:#0f172a;--mut:#64748b;--bd:#e2e8f0;--bg:#f8fafc;--ok:#059669;--warn:#d97706;--bad:#e11d48}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 Inter,sans-serif;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums}
+h1,h2,h3,.logo{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-.02em;margin:0}h1{font-size:30px}h3{font-size:17px;margin-bottom:12px}
+.mut{color:var(--mut)}small{color:var(--mut)}
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{background:#fff;border-right:1px solid var(--bd);padding:20px 12px}.logo{font-size:18px;font-weight:700;padding:4px 12px 20px}.logo i{font-style:normal;color:var(--p);font-size:11px;background:#dbeafe;border-radius:99px;padding:2px 8px;margin-left:4px}
+nav a{display:block;padding:10px 12px;border-radius:8px;color:#334155;text-decoration:none;font-weight:600;margin-bottom:2px}nav a.on{background:#dbeafe;color:var(--p)}nav a:hover{background:#f1f5f9}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 40px;background:#fff;border-bottom:1px solid var(--bd)}
+main{padding:28px 40px;max-width:1280px}.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.card{background:#fff;border:1px solid var(--bd);border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(15,23,42,.04)}
+.grid{display:grid;gap:16px;margin-bottom:16px}.g4{grid-template-columns:repeat(4,1fr)}.g2{grid-template-columns:2fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+.kpi small{text-transform:uppercase;font-weight:600;font-size:11px;letter-spacing:.03em}.kpi b{display:block;font:700 32px 'Plus Jakarta Sans';margin:6px 0}
+.btn{border:1px solid var(--bd);background:#fff;border-radius:8px;padding:9px 14px;font:600 13px Inter;cursor:pointer;color:var(--ink)}.btn:hover{background:var(--bg)}
+.btn.pri{background:var(--p);color:#fff;border:0}.btn.pri:hover{background:#1e40af}.btn.ok{background:var(--ok);color:#fff;border:0}.btn.ghost{border:0;background:none;color:var(--mut)}.btn:disabled{opacity:.5;cursor:default}
+input,select,textarea{width:100%;height:40px;border:1px solid var(--bd);border-radius:8px;padding:0 12px;font:14px Inter;background:#fff}textarea{height:80px;padding:10px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--p);box-shadow:0 0 0 3px rgba(29,78,216,.12)}
+label{display:block;font-weight:600;font-size:12px;margin:12px 0 5px}
+table{width:100%;border-collapse:collapse}th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--mut);background:var(--bg);padding:12px;border-bottom:1px solid var(--bd)}td{padding:14px 12px;border-bottom:1px solid #f1f5f9}tr:hover td{background:var(--bg)}
+.scroll{overflow-x:auto}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid}
+.ok{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}.warn{background:#fffbeb;color:#92400e;border-color:#fde68a}.bad{background:#fff1f2;color:#9f1239;border-color:#fecdd3}.neu{background:#eff4ff;color:#1e3a8a;border-color:#dbeafe}
+.av{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#dbeafe;color:var(--p);font-weight:700;font-size:12px;margin-right:8px;vertical-align:middle}
+.bars{display:flex;gap:14px;align-items:flex-end;height:160px;padding-top:10px}.bars div{flex:1;text-align:center;font-size:12px}.bars span{display:block;background:var(--p);border-radius:8px 8px 0 0;min-height:4px}
+.meter{height:8px;border-radius:9px;background:#e5eeff;overflow:hidden;margin:4px 0 12px}.meter i{display:block;height:100%;background:var(--p)}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f1f5f9}
+.task{border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:12px;background:#fff}.task.c{background:#eff4ff}
+dialog{border:0;border-radius:16px;padding:24px;width:min(460px,92vw);box-shadow:0 20px 25px -5px rgba(15,23,42,.2)}dialog::backdrop{background:rgba(15,23,42,.4);backdrop-filter:blur(4px)}
+.lg{min-height:100vh;display:grid;place-items:center;padding:16px}.lg .card{width:min(420px,100%);padding:32px}.lg h2{font-size:22px;text-align:center}.err{color:var(--bad);font-weight:600;margin-top:10px;min-height:18px}
+@media(max-width:900px){.shell{grid-template-columns:1fr}aside{display:flex;overflow-x:auto;padding:8px}.logo{display:none}nav{display:flex;gap:4px}nav a{white-space:nowrap}main,header{padding:16px}.g4,.g2,.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
+</style></head><body><div id="app"></div>
+<script>
+const SB_URL='https://tmyrkkbopywejckjbdkc.supabase.co',SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRteXJra2JvcHl3ZWpja2piZGtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA5MDQxODUsImV4cCI6MjEwNjQ4MDE4NX0.ani3HR7vEER9gOcghYK1SFULkwgdz0Kqxr-QlDIsNwU';
+const sb=supabase.createClient(SB_URL,SB_KEY),$=s=>document.querySelector(s),app=$('#app');
+let me=null,tick=null;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ok=r=>{if(r.error)throw r.error;return r.data};
+const tm=d=>d?new Date(d).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'—';
+const dd=d=>new Date(d).toLocaleDateString([],{month:'short',day:'numeric'});
+const ymd=d=>new Date(d).toLocaleDateString('en-CA');
+const today=()=>ymd(Date.now());
+const ini=n=>n.split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase();
+const late=t=>{const d=new Date(t);return d.getHours()*60+d.getMinutes()>555};
+const hrs=a=>a.check_in&&a.check_out?(new Date(a.check_out)-new Date(a.check_in))/36e5:0;
+const pill=(t,c)=>`<span class="pill ${c}">${t}</span>`;
+const PR={critical:'bad',high:'warn',medium:'neu',low:'neu'},ST={todo:'To Do',in_progress:'In Progress',review:'In Review',done:'Done'};
+const who=n=>`<span class="av">${esc(ini(n))}</span>${esc(n)}`;
+const NAV={founder:[['dashboard','Dashboard'],['employees','Employee Directory'],['tasks','Tasks & Projects'],['attendance','Attendance Reports']],employee:[['portal','Employee Portal'],['tasks','My Tasks'],['attendance','My Attendance']]};
+
+function loginView(msg=''){
+  app.innerHTML=`<div class="lg"><form class="card" id="lf"><h2>ATIONO WORKSPACE</h2><p class="mut" style="text-align:center;margin:4px 0 20px">Enterprise Unified Infrastructure Control</p>
+  <label>Work Email or Employee ID</label><input name="u" placeholder="e.g. EMP-103 or user@ationo.work" required autocomplete="username">
+  <label>Password</label><input name="pw" type="password" required autocomplete="current-password">
+  <button class="btn pri" style="width:100%;margin-top:18px;height:42px">Sign In to Workspace →</button><div class="err" id="er">${esc(msg)}</div></form></div>`;
+  $('#lf').onsubmit=async e=>{e.preventDefault();const f=e.target,b=f.querySelector('button');b.disabled=true;$('#er').textContent='';
+    try{let id=f.u.value.trim();
+      if(!id.includes('@')){id=ok(await sb.rpc('ao_login_email',{p_id:id}));if(!id)throw Error('Unknown employee ID')}
+      const r=await sb.auth.signInWithPassword({email:id,password:f.pw.value});if(r.error)throw Error('Invalid credentials');
+      await boot()}catch(x){$('#er').textContent=x.message;b.disabled=false}};
+}
+async function boot(){
+  const{data:{session}}=await sb.auth.getSession();if(!session)return loginView();
+  const r=await sb.from('ationo_profiles').select('*').eq('user_id',session.user.id).maybeSingle();
+  if(!r.data){await sb.auth.signOut();return loginView('No employee profile linked to this account.')}
+  me=r.data;route();
+}
+function shell(key){
+  clearInterval(tick);
+  app.innerHTML=`<div class="shell"><aside><div class="logo">ATIONO <i>WORKSPACE</i></div><nav>${NAV[me.role].map(([k,l])=>`<a href="#/${k}" class="${k==key?'on':''}">${l}</a>`).join('')}</nav></aside>
+  <div><header><span class="mut">${me.role=='founder'?'Executive Overview':esc(me.department)}</span><div>${who(me.full_name)} <small>${me.emp_id}</small> <button class="btn ghost" id="pw">Password</button><button class="btn ghost" id="lo">Sign out</button></div></header><main><p class="mut">Loading…</p></main></div></div>`;
+  $('#lo').onclick=async()=>{await sb.auth.signOut();me=null;location.hash='';loginView()};
+  $('#pw').onclick=async()=>{const p=prompt('New password (min 8 characters)');if(p&&p.length>=8){const e=(await sb.auth.updateUser({password:p})).error;alert(e?e.message:'Password updated')}};
+}
+const PAGES={};
+async function route(){
+  const k=location.hash.slice(2),n=NAV[me.role],key=n.some(x=>x[0]==k)?k:n[0][0];
+  shell(key);try{await PAGES[key]()}catch(e){$('main').innerHTML=`<div class="card"><b>Something went wrong:</b> ${esc(e.message||e)}</div>`}
+}
+addEventListener('hashchange',()=>me&&route());
+
+PAGES.dashboard=async()=>{
+  const w=ymd(Date.now()-6*864e5),d=today();
+  const[p,a,t]=await Promise.all([sb.from('ationo_profiles').select('*').eq('status','active'),sb.from('ationo_attendance').select('*,profiles:ationo_profiles(full_name,emp_id)').gte('work_date',w).order('check_in',{ascending:false}),sb.from('ationo_tasks').select('*,profiles:ationo_profiles(full_name)').neq('status','done').order('due_at')]);
+  const team=ok(p),att=ok(a),tk=ok(t),tod=att.filter(x=>x.work_date==d),crit=tk.filter(x=>x.priority=='critical').length;
+  const days=[...Array(5)].map((_,i)=>ymd(Date.now()-(4-i)*864e5)),depts={};team.forEach(x=>depts[x.department]=(depts[x.department]||0)+1);
+  $('main').innerHTML=`<div class="top"><div><h1>Good day, ${esc(me.full_name.split(' ')[0])}</h1><span class="mut">ATIONO WORKSPACE • ${new Date().toDateString()}</span></div><a class="btn pri" href="#/employees">+ Add Employee</a></div>
+  <div class="grid g4"><div class="card kpi"><small>Total team</small><b>${team.length}</b><small>${Object.keys(depts).length} departments</small></div>
+  <div class="card kpi"><small>Present today</small><b>${tod.length} <span class="mut" style="font-size:18px">/ ${team.length}</span></b><div class="meter"><i style="width:${team.length?tod.length/team.length*100:0}%"></i></div></div>
+  <div class="card kpi"><small>Late today</small><b>${tod.filter(x=>late(x.check_in)).length}</b><small>after 9:15 AM</small></div>
+  <div class="card kpi"><small>Open tasks</small><b>${tk.length}</b><small style="color:var(--bad)">${crit} critical</small></div></div>
+  <div class="grid g2"><div class="card"><h3>Attendance — last 5 days</h3><div class="bars">${days.map(x=>{const c=att.filter(y=>y.work_date==x).length,pc=team.length?Math.round(c/team.length*100):0;return`<div><small>${pc}%</small><span style="height:${pc*1.2}px"></span>${dd(x+'T12:00')}</div>`}).join('')}</div></div>
+  <div class="card"><h3>Live check-in feed</h3>${tod.slice(0,6).map(x=>`<div class="row"><span>${who(x.profiles.full_name)}</span><span>${tm(x.check_in)} ${late(x.check_in)?pill('Late','warn'):pill('On time','ok')}</span></div>`).join('')||'<p class="mut">No check-ins yet today.</p>'}</div></div>
+  <div class="grid g2"><div class="card"><h3>Urgent tasks</h3><div class="scroll"><table><tr><th>Task</th><th>Priority</th><th>Assignee</th><th>Due</th></tr>${tk.filter(x=>['critical','high'].includes(x.priority)).slice(0,6).map(x=>`<tr><td><b>${esc(x.title)}</b><br><small>${esc(x.project||'')}</small></td><td>${pill(x.priority,PR[x.priority])}</td><td>${esc(x.profiles?.full_name||'Unassigned')}</td><td>${x.due_at?dd(x.due_at)+' '+tm(x.due_at):'—'}</td></tr>`).join('')||'<tr><td colspan=4 class="mut">Nothing urgent.</td></tr>'}</table></div></div>
+  <div class="card"><h3>Department allocation</h3>${Object.entries(depts).map(([k,v])=>`<div><div class="row" style="border:0;padding:2px 0"><span>${esc(k)}</span><small>${v} members</small></div><div class="meter"><i style="width:${v/team.length*100}%"></i></div></div>`).join('')}</div></div>`;
+};
+
+PAGES.employees=async()=>{
+  const list=ok(await sb.from('ationo_profiles').select('*').order('emp_id')),next=ok(await sb.rpc('ao_next_emp_id'));
+  const draw=q=>list.filter(x=>(x.full_name+x.emp_id+x.department).toLowerCase().includes(q.toLowerCase())).map(x=>`<tr><td>${who(x.full_name)}<br><small>${esc(x.email)}</small></td><td>${x.emp_id}</td><td>${esc(x.department)}</td><td>${esc(x.role_title||'')}</td><td>${pill(x.user_id?'Can sign in':'Record only',x.user_id?'ok':'neu')}</td></tr>`).join('');
+  $('main').innerHTML=`<div class="top"><div><h1>Employee Directory</h1><span class="mut">${list.length} people • next ID ${next}</span></div><button class="btn pri" id="add">+ Add New Employee</button></div>
+  <div class="card"><input id="q" placeholder="Search by name, ID or department…" style="margin-bottom:12px"><div class="scroll"><table><tr><th>Employee</th><th>ID</th><th>Department</th><th>Role</th><th>Access</th></tr><tbody id="tb">${draw('')}</tbody></table></div></div>
+  <dialog id="dg"><form id="ef"><h3>Create New Employee</h3><div class="pill neu">${next}</div>
+  <label>Full name</label><input name="n" required><label>Corporate email</label><input name="e" type="email" required>
+  <label>Department</label><select name="d"><option>Engineering</option><option>Product & Design</option><option>Growth & Sales</option><option>Operations</option></select>
+  <label>Role title</label><input name="t" required><label>Temporary password</label><input name="p" minlength="8" required value="${Math.random().toString(36).slice(2,6)}-${Math.random().toString(36).slice(2,8)}#A1">
+  <div class="err" id="er"></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px"><button type="button" class="btn" id="cx">Cancel</button><button class="btn pri">Create & Issue ID</button></div></form></dialog>`;
+  $('#q').oninput=e=>$('#tb').innerHTML=draw(e.target.value);$('#add').onclick=()=>$('#dg').showModal();$('#cx').onclick=()=>$('#dg').close();
+  $('#ef').onsubmit=async e=>{e.preventDefault();const f=e.target;try{const id=ok(await sb.rpc('ao_create_employee',{p_name:f.n.value,p_email:f.e.value,p_dept:f.d.value,p_title:f.t.value,p_password:f.p.value}));alert(`Created ${id}.\nSign-in: ${f.e.value} or ${id}\nTemporary password: ${f.p.value}`);route()}catch(x){$('#er').textContent=x.message}};
+};
+
+PAGES.tasks=async()=>{
+  const f=me.role=='founder',[t,p]=await Promise.all([sb.from('ationo_tasks').select('*,profiles:ationo_profiles(full_name,emp_id)').order('created_at',{ascending:false}),sb.from('ationo_profiles').select('id,full_name,emp_id').eq('status','active').order('emp_id')]);
+  const tk=ok(t),pr=ok(p),cnt=s=>tk.filter(x=>x.status==s).length;
+  $('main').innerHTML=`<div class="top"><div><h1>${f?'Task Delegation & Tracking':'My Tasks'}</h1><span class="mut">${tk.length} tasks • ${cnt('done')} done • ${cnt('in_progress')} in progress • ${cnt('review')} in review</span></div></div>
+  <div class="grid" style="grid-template-columns:${f?'340px 1fr':'1fr'};align-items:start">
+  ${f?`<form class="card" id="tf"><h3>Delegate task</h3><label>Assignee</label><select name="a" required>${pr.map(x=>`<option value="${x.id}">${esc(x.full_name)} • ${x.emp_id}</option>`).join('')}</select>
+  <label>Title</label><input name="t" required><label>Description</label><textarea name="d"></textarea><label>Project</label><input name="pj">
+  <label>Priority</label><select name="pr"><option>low</option><option selected>medium</option><option>high</option><option>critical</option></select>
+  <label>Est. hours</label><input name="h" type="number" min="0" step="0.5"><label>Due</label><input name="du" type="datetime-local">
+  <button class="btn pri" style="width:100%;margin-top:16px">Assign & Notify</button><div class="err" id="er"></div></form>`:''}
+  <div>${tk.map(x=>`<div class="task ${x.priority=='critical'&&x.status!='done'?'c':''}"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span>${pill(x.priority,PR[x.priority])} ${x.project?pill(esc(x.project),'neu'):''}</span>
+  <select data-id="${x.id}" style="width:150px;height:32px">${Object.entries(ST).map(([k,v])=>`<option value="${k}" ${k==x.status?'selected':''}>${v}</option>`).join('')}</select></div>
+  <h3 style="margin:10px 0 4px">${esc(x.title)}</h3><p class="mut" style="margin:0 0 8px">${esc(x.description||'')}</p>
+  <small>${f&&x.profiles?esc(x.profiles.full_name)+' • '+x.profiles.emp_id+' • ':''}${x.due_at?'Due '+dd(x.due_at)+' '+tm(x.due_at):'No due date'}${x.est_hours?' • Est '+x.est_hours+'h':''}</small></div>`).join('')||'<div class="card mut">No tasks yet.</div>'}</div></div>`;
+  document.querySelectorAll('select[data-id]').forEach(s=>s.onchange=async()=>{const r=await sb.from('ationo_tasks').update({status:s.value}).eq('id',s.dataset.id);if(r.error)alert(r.error.message);else route()});
+  if(f)$('#tf').onsubmit=async e=>{e.preventDefault();const g=e.target,dep=pr.find(x=>x.id==g.a.value);const r=await sb.from('ationo_tasks').insert({assignee:g.a.value,title:g.t.value,description:g.d.value,project:g.pj.value||null,priority:g.pr.value,est_hours:g.h.value||null,due_at:g.du.value?new Date(g.du.value).toISOString():null});if(r.error)$('#er').textContent=r.error.message;else route()};
+};
+
+PAGES.attendance=async()=>{
+  const f=me.role=='founder',a=ok(await sb.from('ationo_attendance').select('*,profiles:ationo_profiles(full_name,emp_id,department)').order('work_date',{ascending:false}).order('check_in',{ascending:false}).limit(200));
+  const L=a.filter(x=>x.check_in&&late(x.check_in)).length,H=a.reduce((s,x)=>s+hrs(x),0),D=a.filter(x=>x.check_out).length;
+  $('main').innerHTML=`<div class="top"><div><h1>${f?'Attendance Reports':'My Attendance & Work History'}</h1><span class="mut">Latest ${a.length} records</span></div><button class="btn pri" id="csv">Export CSV</button></div>
+  <div class="grid g3"><div class="card kpi"><small>Days logged</small><b>${a.length}</b></div><div class="card kpi"><small>Late arrivals</small><b>${L}</b></div><div class="card kpi"><small>Total hours</small><b>${H.toFixed(1)}</b><small>avg ${D?(H/D).toFixed(1):'0'} h / day</small></div></div>
+  <div class="card scroll"><table><tr><th>Employee</th><th>Date</th><th>Check-in</th><th>Check-out</th><th>Duration</th><th>Status</th></tr>${a.map(x=>`<tr><td>${who(x.profiles.full_name)}<br><small>${x.profiles.emp_id}</small></td><td>${dd(x.work_date+'T12:00')}</td><td>${tm(x.check_in)}</td><td>${x.check_out?tm(x.check_out):pill('In progress','neu')}</td><td>${hrs(x)?hrs(x).toFixed(1)+'h':'—'}</td><td>${late(x.check_in)?pill('Late','warn'):pill('On time','ok')}</td></tr>`).join('')||'<tr><td colspan=6 class="mut">No records yet.</td></tr>'}</table></div>`;
+  $('#csv').onclick=()=>{const c=[['Employee','ID','Date','In','Out','Hours'],...a.map(x=>[x.profiles.full_name,x.profiles.emp_id,x.work_date,x.check_in||'',x.check_out||'',hrs(x).toFixed(2)])].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');const l=document.createElement('a');l.href=URL.createObjectURL(new Blob([c],{type:'text/csv'}));l.download='attendance.csv';l.click()};
+};
+
+PAGES.portal=async()=>{
+  const w=ymd(Date.now()-6*864e5),[a,t]=await Promise.all([sb.from('ationo_attendance').select('*').eq('profile_id',me.id).gte('work_date',w),sb.from('ationo_tasks').select('*').eq('assignee',me.id).neq('status','done').order('due_at')]);
+  const att=ok(a),tk=ok(t),rec=att.find(x=>x.work_date==today()),wk=att.reduce((s,x)=>s+hrs(x),0);
+  $('main').innerHTML=`<div class="card top" style="align-items:center"><div><h1>Hello, ${esc(me.full_name.split(' ')[0])}</h1><span class="mut">${esc(me.role_title||'')} • ${me.emp_id} • ${esc(me.department)}</span></div><div style="text-align:right"><h2 id="clk"></h2><small>${new Date().toDateString()}</small></div></div>
+  <div class="grid g2"><div class="card"><h3>Daily attendance</h3>
+  ${rec?`<p>${pill(late(rec.check_in)?'Late':'On time',late(rec.check_in)?'warn':'ok')} Checked in at <b>${tm(rec.check_in)}</b>${rec.check_out?` • out at <b>${tm(rec.check_out)}</b> (${hrs(rec).toFixed(1)}h)`:''}</p>`:'<p class="mut">You have not checked in today.</p>'}
+  <button class="btn ok" id="ci" ${rec?'disabled':''}>Check In</button> <button class="btn" id="co" ${!rec||rec.check_out?'disabled':''}>Check Out</button>
+  <div class="err" id="er"></div><div class="row" style="margin-top:14px"><span>Last 7 days</span><b>${wk.toFixed(1)} h</b></div><div class="row"><span>Days present (7d)</span><b>${att.length}</b></div></div>
+  <div class="card"><h3>Open tasks (${tk.length})</h3>${tk.map(x=>`<div class="row"><span><b>${esc(x.title)}</b><br><small>${x.due_at?'Due '+dd(x.due_at):''}</small></span>${pill(x.priority,PR[x.priority])}</div>`).join('')||'<p class="mut">All caught up.</p>'}<a class="btn" style="display:inline-block;margin-top:12px;text-decoration:none" href="#/tasks">Open task board</a></div></div>`;
+  const clk=()=>{const e=$('#clk');if(e)e.textContent=new Date().toLocaleTimeString()};clk();tick=setInterval(clk,1000);
+  $('#ci').onclick=async()=>{const r=await sb.from('ationo_attendance').insert({profile_id:me.id,work_date:today(),check_in:new Date().toISOString(),location:'Web'});r.error?$('#er').textContent=r.error.message:route()};
+  $('#co').onclick=async()=>{const r=await sb.from('ationo_attendance').update({check_out:new Date().toISOString()}).eq('profile_id',me.id).eq('work_date',today());r.error?$('#er').textContent=r.error.message:route()};
+};
+boot();
+</script></body></html>
