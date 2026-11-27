@@ -72,7 +72,7 @@ async function boot(){
 }
 function shell(key){
   clearInterval(tick);
-  app.innerHTML=`<div class="shell"><aside><div class="logo"><img src="/logo.jpg" alt="ATIONO WORKSPACE"></div><nav>${NAV[me.role].map(([k,l])=>`<a href="#/${k}" class="${k==key?'on':''}">${l}</a>`).join('')}</nav></aside>
+  app.innerHTML=`<div class="shell"><aside><div class="logo"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG1tsaJZ-HLw-nd0bwxIt54bFL-YmBpgohkVElYNLFVF6wgCAjqQN1u1eY43eiCvss3Y690WwCdoRBmXmyPs5GonSjYoVCkQXuPYxn47RCrDrNFt1mrTsst5JfzShyBctKeD00cnYL2ywECrkMut0p99GY9VMn6C8_KsHyuEmzjWEBvU4EnsvmKr_5uN7tbP91NfRT6574GGlQeJVeLOJIxxjNgkJRHNoCA5gOqKUDd62BvLtwfokj" alt="ATIONO WORKSPACE"></div><nav>${NAV[me.role].map(([k,l])=>`<a href="#/${k}" class="${k==key?'on':''}">${l}</a>`).join('')}</nav></aside>
   <div><header><span class="mut">${me.role=='founder'?'Executive Overview':esc(me.department)}</span><div>${who(me.full_name)} <small>${me.emp_id}</small> <button class="btn ghost" id="pw">Password</button><button class="btn ghost" id="lo">Sign out</button></div></header><main><p class="mut">Loading…</p></main></div></div>`;
   $('#lo').onclick=async()=>{await sb.auth.signOut();me=null;location.hash='';loginView()};
   $('#pw').onclick=async()=>{const p=prompt('New password (min 8 characters)');if(p&&p.length>=8){const e=(await sb.auth.updateUser({password:p})).error;alert(e?e.message:'Password updated')}};
